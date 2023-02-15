@@ -1,3 +1,6 @@
+from FiniteAutomaton import FiniteAutomaton
+
+
 def min_len_index(arr):
     m = 0
     for i in range(len(arr)):
@@ -7,45 +10,45 @@ def min_len_index(arr):
 
 
 class Grammar:
-    vn = []
-    vt = []
-    p = {}
-    s = ''
+    non_terminal = []
+    terminal = []
+    production = {}
+    start = ''
 
-    def __init__(self, vn, vt, p, s):
-        self.vn = vn
-        self.vt = vt
-        self.p = p
-        self.s = s
+    def __init__(self, non_terminal, terminal, production, start):
+        self.non_terminal = non_terminal
+        self.terminal = terminal
+        self.production = production
+        self.start = start
 
-        for key in self.p:
-            self.p[key].sort(key=lambda st: len(st))
-            for s in self.p[key]:
-                if key in s:
-                    for i in range(len(self.p[key])):
-                        if self.p[key] == s and i < len(self.p[key]) - 1:
-                            self.p[key].pop(i)
-                            self.p[key].append(s)
+        for key in self.production:
+            self.production[key].sort(key=lambda st: len(st))
+            for start in self.production[key]:
+                if key in start:
+                    for i in range(len(self.production[key])):
+                        if self.production[key] == start and i < len(self.production[key]) - 1:
+                            self.production[key].pop(i)
+                            self.production[key].append(start)
 
     # Check if a string is valid (terminal)
     def check(self, s):
-        return not any(c not in self.vt for c in s)
+        return not any(c not in self.terminal for c in s)
 
     def generate_string(self):
         strings = []
         final_strings = []
-        string = self.s
+        string = self.start
         strings.append(string)
         while len(final_strings) < 5:
             for c in string:
-                if c in self.vn:
+                if c in self.non_terminal:
                     ind = 0
                     initial_string = string
-                    string = string.replace(c, self.p[c][ind], 1)
+                    string = string.replace(c, self.production[c][ind], 1)
                     if string in final_strings:
                         string = initial_string
                         ind += 1
-                        string = string.replace(c, self.p[c][ind], 1)
+                        string = string.replace(c, self.production[c][ind], 1)
 
                     if not self.check(string):
                         strings.append(string)
@@ -55,3 +58,10 @@ class Grammar:
                 string = strings[-1]
 
         return final_strings
+
+    def to_finite_automaton(self):
+        # TODO: Finish
+        # Conversion logic
+
+        final = ''
+        return FiniteAutomaton(self.non_terminal, self.terminal, self.start, final)

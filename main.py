@@ -1,13 +1,14 @@
-import Grammar
-# import FiniteAutomaton
+from Grammar import Grammar
 
 
 def main():
-    grammar = Grammar.Grammar(['S', 'B', 'D', 'Q'],
-                              ['a', 'b', 'c', 'd'],
-                              {'S': ['aB', 'bB'], 'B': ['cD'], 'D': ['dQ', 'a'], 'Q': ['dB', 'dQ']},
-                              'S')
-    strings = grammar.generate_string()
+    g = Grammar(['S', 'B', 'D', 'Q'],
+                ['a', 'b', 'c', 'd'],
+                {'S': ['aB', 'bB'], 'B': ['cD'], 'D': ['dQ', 'a'], 'Q': ['dB', 'dQ']},
+                'S')
+    fa = g.to_finite_automaton()
+
+    strings = g.generate_string()
     print(strings)
 
 
