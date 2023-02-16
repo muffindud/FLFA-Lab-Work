@@ -34,12 +34,12 @@ class Grammar:
     def check(self, s):
         return not any(c not in self.terminal for c in s)
 
-    def generate_string(self):
+    def generate_string(self, no=5):
         strings = []
         final_strings = []
         string = self.start
         strings.append(string)
-        while len(final_strings) < 5:
+        while len(final_strings) < no:
             for c in string:
                 if c in self.non_terminal:
                     ind = 0

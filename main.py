@@ -8,7 +8,7 @@ def main():
                 'S')
     fa = g.to_finite_automaton()
 
-    strings = g.generate_string()
+    strings = g.generate_string(7)
     print(strings)
 
 
