@@ -60,8 +60,28 @@ class Grammar:
         return final_strings
 
     def to_finite_automaton(self):
-        # TODO: Finish
-        # Conversion logic
+        transitions = {}
+        for p in self.production.keys():
+            for s in self.production[p]:
+                for c in s:
+                    if c in self.terminal:
+                        if (p, c) not in transitions.items():
+                            transitions[(p, c)] = []
+
+        for p in self.production.keys():
+            for s in self.production[p]:
+                n = ''
+                t = ''
+                for c in s:
+                    if c in self.terminal:
+                        t = c
+                    if c in self.non_terminal:
+                        n = c
+                    if n not in transitions[(p, t)] and n != '':
+                        transitions[(p, t)].append(n)
 
         final = ''
-        return FiniteAutomaton(self.non_terminal, self.terminal, self.start, final)
+        for p in transitions.keys():
+            if not transitions[p]:
+                final = p[1]
+        return FiniteAutomaton(self.non_terminal, self.terminal, self.start, transitions, final)
