@@ -13,5 +13,15 @@ class FiniteAutomaton:
         self.final_states = final_states
 
     def check(self, string):
-        # TODO
-        pass
+        current_state = self.initial_state
+
+        for char in string:
+            if (current_state, char) in self.transitions:
+                next_states = self.transitions[(current_state, char)]
+                if not next_states:
+                    return False
+                current_state = next_states[0]
+            else:
+                return False
+
+        return current_state in self.final_states

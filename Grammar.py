@@ -79,9 +79,9 @@ class Grammar:
                         n = c
                     if n not in transitions[(p, t)] and n != '':
                         transitions[(p, t)].append(n)
+                if not transitions[(p, t)]:
+                    transitions[(p, t)].append('')
 
-        final = ''
-        for p in transitions.keys():
-            if not transitions[p]:
-                final = p[1]
+        final = ['']
+
         return FiniteAutomaton(self.non_terminal, self.terminal, self.start, transitions, final)
