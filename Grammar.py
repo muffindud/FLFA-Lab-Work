@@ -1,6 +1,3 @@
-from FiniteAutomaton import FiniteAutomaton
-
-
 def min_len_index(arr):
     m = 0
     for i in range(len(arr)):
@@ -60,6 +57,8 @@ class Grammar:
         return final_strings
 
     def to_finite_automaton(self):
+        from FiniteAutomaton import FiniteAutomaton
+
         transitions = {}
         for p in self.production.keys():
             for s in self.production[p]:
