@@ -1,5 +1,5 @@
 from Grammar import Grammar
-from FiniteAutomaton import FiniteAutomaton
+from NFA import NFA
 
 
 def main_1():
@@ -40,22 +40,25 @@ def main_1():
 
 
 def main_2():
-    fa = FiniteAutomaton(['q0', 'q1', 'q2', 'q3', 'q4'],
-                         ['a', 'b', 'c'],
-                         'q0',
-                         {
-                             ('q0', 'a'): ['q1'],
-                             ('q1', 'b'): ['q2', 'q3'],
-                             ('q2', 'c'): ['q0'],
-                             ('q3', 'a'): ['q4'],
-                             ('q3', 'b'): ['q0']
-                         },
-                         ['q4'])
+    nfa = NFA(['q0', 'q1', 'q2', 'q3', 'q4'],
+              ['a', 'b', 'c'],
+              'q0',
+              {
+                  ('q0', 'a'): ['q1'],
+                  ('q1', 'b'): ['q2', 'q3'],
+                  ('q2', 'c'): ['q0'],
+                  ('q3', 'a'): ['q4'],
+                  ('q3', 'b'): ['q0']
+              },
+              ['q4'])
 
-    g = fa.to_grammar()
+    # g = fa.to_grammar()
+    #
+    # print(fa.transitions)
+    # print(g.production)
+    # print('Automata type: ' + fa.get_type())
 
-    print(fa.transitions)
-    print(g.production)
+    # nfa.show_graph()
 
 
 if __name__ == '__main__':

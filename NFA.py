@@ -1,4 +1,4 @@
-class FiniteAutomaton:
+class NFA:
     states = []
     alphabet = []
     initial_state = ''
@@ -41,3 +41,29 @@ class FiniteAutomaton:
                     production[t[0]].append(t[1] + s)
 
         return Grammar(self.states, self.alphabet, production, self.initial_state)
+
+    def get_type(self):
+        for t in self.transitions:
+            if len(self.transitions[t]) > 1:
+                return 'NFA'
+        return 'DFA'
+
+    def show_graph(self):
+        import networkx as nx
+        import matplotlib.pyplot as plt
+
+        G = nx.DiGraph()
+
+        G.add_nodes_from(self.states)
+
+        for t in self.transitions:
+            for s in self.transitions[t]:
+                G.add_edge(t[0], s, label=t[1])
+
+        pos = nx.spring_layout(G)
+        nx.draw_networkx_nodes(G, pos)
+        nx.draw_networkx_edges(G, pos)
+        nx.draw_networkx_labels(G, pos)
+        nx.draw_networkx_edge_labels(G, pos)
+
+        plt.show()
