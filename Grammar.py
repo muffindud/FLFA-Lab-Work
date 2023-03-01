@@ -56,7 +56,7 @@ class Grammar:
 
         return final_strings
 
-    def to_finite_automaton(self):
+    def to_nfa(self):
         from NFA import NFA
 
         transitions = {}
