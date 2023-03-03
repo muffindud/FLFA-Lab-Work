@@ -48,6 +48,33 @@ class NFA:
                 return 'NFA'
         return 'DFA'
 
+    def to_dfa(self):
+        from DFA import DFA
+
+        dfa_states = []
+        dfa_final_states = []
+        dfa_transitions = []
+
+        dfa_states = [[self.initial_state]]
+
+        for states in dfa_states:
+            for s in states:
+                new_states = []
+                for c in self.alphabet:
+                    if (s, c) in self.transitions.keys():
+                        new_states.append(self.transitions[(s, c)])
+                for ns in new_states:
+                    if ns and ns not in dfa_states:
+                        dfa_states.append(ns)
+
+        # for c in self.alphabet:
+        #     if (self.initial_state, c) in self.transitions.keys():
+        #         dfa_states.append([self.initial_state])
+        #         for s in self.transitions[self.initial_state, c]:
+        #             dfa_states[-1].append(s)
+
+        return DFA(dfa_states, self.alphabet, self.initial_state, dfa_final_states, dfa_transitions)
+
     def show_graph(self):
         import networkx as nx
         import matplotlib.pyplot as plt
