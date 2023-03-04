@@ -51,27 +51,25 @@ class NFA:
     def to_dfa(self):
         from DFA import DFA
 
-        dfa_states = []
         dfa_final_states = []
-        dfa_transitions = []
+        dfa_transitions = {}
 
         dfa_states = [[self.initial_state]]
 
         for states in dfa_states:
             for s in states:
                 new_states = []
+                state_terminals = []
                 for c in self.alphabet:
                     if (s, c) in self.transitions.keys():
                         new_states.append(self.transitions[(s, c)])
+                        state_terminals.append(c)
                 for ns in new_states:
                     if ns and ns not in dfa_states:
                         dfa_states.append(ns)
-
-        # for c in self.alphabet:
-        #     if (self.initial_state, c) in self.transitions.keys():
-        #         dfa_states.append([self.initial_state])
-        #         for s in self.transitions[self.initial_state, c]:
-        #             dfa_states[-1].append(s)
+                for i in range(len(new_states)):
+                    if new_states[i]:
+                        dfa_transitions[(tuple(states), state_terminals[i])] = new_states[i]
 
         return DFA(dfa_states, self.alphabet, self.initial_state, dfa_final_states, dfa_transitions)
 

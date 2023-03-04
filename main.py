@@ -20,7 +20,7 @@ def main_1():
     print(strings, end='\n\n')
 
     # The Grammar.to_finite_automaton will convert final automaton format
-    fa = g.to_finite_automaton()
+    fa = g.to_nfa()
     print('Generated transition:')
     print(fa.transitions, end='\n\n')
 
@@ -51,6 +51,10 @@ def main_2():
                   ('q3', 'b'): ['q0']
               },
               ['q4'])
+
+    dfa = nfa.to_dfa()
+    print(dfa.states)
+    print(dfa.transitions)
 
     # g = fa.to_grammar()
     #
