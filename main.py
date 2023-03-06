@@ -1,5 +1,5 @@
 from Grammar import Grammar
-from NFA import NFA
+from FinalAutomata import FinalAutomata
 
 
 def main_1():
@@ -40,29 +40,28 @@ def main_1():
 
 
 def main_2():
-    nfa = NFA(['q0', 'q1', 'q2', 'q3', 'q4'],
-              ['a', 'b', 'c'],
-              'q0',
-              {
-                  ('q0', 'a'): ['q1'],
-                  ('q1', 'b'): ['q2', 'q3'],
-                  ('q2', 'c'): ['q0'],
-                  ('q3', 'a'): ['q4'],
-                  ('q3', 'b'): ['q0']
-              },
-              ['q4'])
+    nfa = FinalAutomata(['q0', 'q1', 'q2', 'q3', 'q4'],
+                        ['a', 'b', 'c'],
+                        'q0',
+                        {
+                            ('q0', 'a'): ['q1'],
+                            ('q1', 'b'): ['q2', 'q3'],
+                            ('q2', 'c'): ['q0'],
+                            ('q3', 'a'): ['q4'],
+                            ('q3', 'b'): ['q0']
+                        },
+                        'q4')
 
     dfa = nfa.to_dfa()
     print(dfa.states)
     print(dfa.transitions)
+    print(dfa.final_states)
 
-    # g = fa.to_grammar()
-    #
-    # print(fa.transitions)
-    # print(g.production)
-    # print('Automata type: ' + fa.get_type())
-
-    # nfa.show_graph()
+    # Will work only if graphviz is installed and in system path
+    # Please refer to:
+    # https://stackoverflow.com/questions/35064304/runtimeerror-make-sure-the-graphviz-executables-are-on-your-systems-path-aft
+    nfa.show_graph('nfa')
+    dfa.show_graph('dfa')
 
 
 if __name__ == '__main__':

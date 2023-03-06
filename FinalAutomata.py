@@ -1,4 +1,4 @@
-class NFA:
+class FinalAutomata:
     states = []
     alphabet = []
     initial_state = ''
@@ -49,8 +49,6 @@ class NFA:
         return 'DFA'
 
     def to_dfa(self):
-        from DFA import DFA
-
         dfa_final_states = []
         dfa_transitions = {}
 
@@ -71,24 +69,23 @@ class NFA:
                     if new_states[i]:
                         dfa_transitions[(tuple(states), state_terminals[i])] = new_states[i]
 
-        return DFA(dfa_states, self.alphabet, self.initial_state, dfa_final_states, dfa_transitions)
+        for states in dfa_states:
+            if self.final_states in states:
+                dfa_final_states.append(states)
 
-    def show_graph(self):
-        import networkx as nx
-        import matplotlib.pyplot as plt
+        return FinalAutomata(dfa_states, self.alphabet, self.initial_state, dfa_transitions, dfa_final_states)
 
-        G = nx.DiGraph()
+    def show_graph(self, name='graph'):
+        import graphviz as gv
 
-        G.add_nodes_from(self.states)
+        graph = gv.Digraph()
 
-        for t in self.transitions:
-            for s in self.transitions[t]:
-                G.add_edge(t[0], s, label=t[1])
+        for state in self.states:
+            shape = 'circle' if state not in self.final_states else 'doublecircle'
+            graph.node(repr(state), shape=shape)
 
-        pos = nx.spring_layout(G)
-        nx.draw_networkx_nodes(G, pos)
-        nx.draw_networkx_edges(G, pos)
-        nx.draw_networkx_labels(G, pos)
-        nx.draw_networkx_edge_labels(G, pos)
+        for state in self.transitions:
+            for s in [self.transitions[state]]:
+                graph.edge(repr(list(state[0])), repr(s), label=state[1])
 
-        plt.show()
+        graph.view(filename=name+'.gv')

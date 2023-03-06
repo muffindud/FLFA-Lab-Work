@@ -57,7 +57,7 @@ class Grammar:
         return final_strings
 
     def to_nfa(self):
-        from NFA import NFA
+        from FinalAutomata import FinalAutomata
 
         transitions = {}
         for p in self.production.keys():
@@ -83,4 +83,4 @@ class Grammar:
 
         final = ['']
 
-        return NFA(self.non_terminal, self.terminal, self.start, transitions, final)
+        return FinalAutomata(self.non_terminal, self.terminal, self.start, transitions, final)
