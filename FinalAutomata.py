@@ -12,6 +12,7 @@ class FinalAutomata:
         self.transitions = transitions
         self.final_states = final_states
 
+    # Check if string corresponds to FA
     def check(self, string):
         current_state = self.initial_state
 
@@ -26,6 +27,7 @@ class FinalAutomata:
 
         return current_state in self.final_states
 
+    # Convert FA to Grammar
     def to_grammar(self):
         from Grammar import Grammar
 
@@ -43,11 +45,12 @@ class FinalAutomata:
         return Grammar(self.states, self.alphabet, production, self.initial_state)
 
     def get_type(self):
-        for t in self.transitions:
-            if len(self.transitions[t]) > 1:
-                return 'NFA'
-        return 'DFA'
+        if type(self.final_states) == str:
+            return 'NFA'
+        if type(self.final_states) == list:
+            return 'DFA'
 
+    # Automata conversion to DFA
     def to_dfa(self):
         dfa_final_states = []
         dfa_transitions = {}
@@ -80,6 +83,7 @@ class FinalAutomata:
 
         graph = gv.Digraph()
 
+        # Graph generation for NFA
         if type(self.final_states) == str:
             for state in self.states:
                 shape = 'circle' if state not in self.final_states else 'doublecircle'
@@ -88,6 +92,7 @@ class FinalAutomata:
                 for s in self.transitions[state]:
                     graph.edge(state[0], s, label=state[1])
 
+        # Graph generation for DFA
         if type(self.final_states) == list:
             for state in self.states:
                 shape = 'circle' if state not in self.final_states else 'doublecircle'
