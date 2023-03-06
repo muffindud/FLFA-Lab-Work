@@ -80,12 +80,21 @@ class FinalAutomata:
 
         graph = gv.Digraph()
 
-        for state in self.states:
-            shape = 'circle' if state not in self.final_states else 'doublecircle'
-            graph.node(repr(state), shape=shape)
+        if type(self.final_states) == str:
+            for state in self.states:
+                shape = 'circle' if state not in self.final_states else 'doublecircle'
+                graph.node(state, shape=shape)
+            for state in self.transitions:
+                for s in self.transitions[state]:
+                    graph.edge(state[0], s, label=state[1])
 
-        for state in self.transitions:
-            for s in [self.transitions[state]]:
-                graph.edge(repr(list(state[0])), repr(s), label=state[1])
+        if type(self.final_states) == list:
+            for state in self.states:
+                shape = 'circle' if state not in self.final_states else 'doublecircle'
+                graph.node(repr(state), shape=shape)
 
-        graph.view(filename=name+'.gv')
+            for state in self.transitions:
+                for s in [self.transitions[state]]:
+                    graph.edge(repr(list(state[0])), repr(s), label=state[1])
+
+        graph.view(filename=name+'.gv', directory='./graphs/')
