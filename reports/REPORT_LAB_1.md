@@ -1,4 +1,4 @@
-# The title of the work
+# Intro to formal languages. Regular grammars. Finite Automata.
 
 #### Course: Formal Languages and Finite Automata
 #### Author: Corneliu Catlabuga FAF-213
@@ -6,7 +6,7 @@
 ----
 
 ## Theory
-The grmmar for the laboratory work (v9):
+The grammar for the laboratory work (v9):
 
 ```
 VN={S, B, D, Q}, 
