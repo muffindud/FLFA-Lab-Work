@@ -2,44 +2,7 @@ from Grammar import Grammar
 from FinalAutomata import FinalAutomata
 
 
-def main_1():
-    g = Grammar(['S', 'B', 'D', 'Q'],
-                ['a', 'b', 'c', 'd'],
-                {
-                    'S': ['aB', 'bB'],
-                    'B': ['cD'],
-                    'D': ['dQ', 'a'],
-                    'Q': ['dB', 'dQ']
-                },
-                'S')
-
-    # The Grammar.generate_string(n) function will generate n (default: 5)
-    # strings corresponding to the specified grammar
-    strings = g.generate_string()
-    print('Generated strings:')
-    print(strings, end='\n\n')
-
-    # The Grammar.to_finite_automaton will convert final automaton format
-    fa = g.to_nfa()
-    print('Generated transition:')
-    print(fa.transitions, end='\n\n')
-
-    # The FinalAutomaton.check(s) will check if the string s is derived from
-    # the transition
-    print('Corresponding strings:')
-    for s in strings:
-        print(fa.check(s))
-
-    print()
-
-    # Un-corresponding strings
-    print('Un-corresponding:')
-    print(fa.check('aa'))
-    print(fa.check('mna'))
-    print(fa.check('acdca'))
-
-
-def main_2():
+def main():
     nfa = FinalAutomata(['q0', 'q1', 'q2', 'q3', 'q4'],
                         ['a', 'b', 'c'],
                         'q0',
@@ -52,11 +15,47 @@ def main_2():
                         },
                         'q4')
 
-    dfa = nfa.to_dfa()
-    print(dfa.states)
-    print(dfa.transitions)
-    print(dfa.final_states)
+    g1 = Grammar(['S', 'B', 'D', 'Q'],
+                 ['a', 'b', 'c', 'd'],
+                 {
+                     'S': ['aB', 'bB'],
+                     'B': ['cD'],
+                     'D': ['dQ', 'a'],
+                     'Q': ['dB', 'dQ']
+                 },
+                 'S')
 
+    # Task 2
+    print('Task 2:')
+    print('Grammar classification: ' + g1.get_classification())
+    print()
+
+    # Task 3a
+    print('Task 3a:')
+    g2 = nfa.to_grammar()
+    print('Grammar non-terminals: ', g2.non_terminal)
+    print('Grammar terminals: ', g2.terminal)
+    print('Grammar start: ', g2.start)
+    print('Grammar productions: ', g2.production)
+    print()
+
+    # Task 3b
+    print('Task 3b:')
+    print('FA1:', nfa.get_type())
+    print()
+
+    # Task 3c
+    print('Task 3c:')
+    dfa = nfa.to_dfa()
+    print('FA2:', dfa.get_type())
+    print('DFA states: ', dfa.states)
+    print('DFA alphabet: ', dfa.alphabet)
+    print('DFA initial state: ', dfa.initial_state)
+    print('DFA transitions: ', dfa.transitions)
+    print('DFA final states: ', dfa.final_states)
+    print()
+
+    # Task 3d
     # Will work only if graphviz is installed and in system path
     # Please refer to:
     # https://stackoverflow.com/questions/35064304/runtimeerror-make-sure-the-graphviz-executables-are-on-your-systems-path-aft
@@ -65,4 +64,4 @@ def main_2():
 
 
 if __name__ == '__main__':
-    main_2()
+    main()
