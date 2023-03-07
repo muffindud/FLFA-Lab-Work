@@ -31,6 +31,7 @@ class Grammar:
     def check(self, s):
         return not any(c not in self.terminal for c in s)
 
+    # Generates no. corresponding strings
     def generate_string(self, no=5):
         strings = []
         final_strings = []
@@ -56,6 +57,7 @@ class Grammar:
 
         return final_strings
 
+    # Converts Grammar ot NFA
     def to_nfa(self):
         from FinalAutomata import FinalAutomata
 
@@ -84,3 +86,23 @@ class Grammar:
         final = ['']
 
         return FinalAutomata(self.non_terminal, self.terminal, self.start, transitions, final)
+
+    def get_classification(self):
+        classification = '3'
+
+        for p in self.production.keys():
+            if len(p) > 1:
+                classification = '1'
+                break
+            for s in self.production[p]:
+                if len(s) == 0:
+                    pass
+                elif len(s) > 2 or s[0] in self.non_terminal or (len(s) == 2 and s[1] in self.terminal):
+                    classification = '2'
+
+        for p in self.production.keys():
+            if any(c in p for c in self.terminal):
+                classification = '0'
+                break
+
+        return classification
