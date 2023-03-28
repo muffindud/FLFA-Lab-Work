@@ -1,5 +1,6 @@
 from Grammar import Grammar
 from FinalAutomata import FinalAutomata
+from Lexer import Lexer
 
 
 def main():
@@ -63,5 +64,10 @@ def main():
     dfa.show_graph('dfa')
 
 
+def main_2():
+    program = Lexer('demo.txt')
+    print(program.tokenize())
+
+
 if __name__ == '__main__':
-    main()
+    main_2()
