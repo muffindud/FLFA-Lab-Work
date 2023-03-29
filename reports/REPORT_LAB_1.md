@@ -51,90 +51,43 @@ P={
 * The FinalAutomata.py holds the FinalAutomata class
 
 ### Grammar.py
-```
-from FiniteAutomaton import FiniteAutomaton
-
-
+```py
 def min_len_index(arr):
-    m = 0
-    for i in range(len(arr)):
-        if len(arr[i]) < len(arr[m]):
-            m = i
-    return m
+    # Returns the index of the minimum length string from an array
 
 
 class Grammar:
-    non_terminal = []
-    terminal = []
-    production = {}
-    start = ''
+    # Grammar parameters
 
     def __init__(self, non_terminal, terminal, production, start):
-        self.non_terminal = non_terminal
-        self.terminal = terminal
-        self.production = production
-        self.start = start
+        # Initialize the grammar
 
         for key in self.production:
-            self.production[key].sort(key=lambda st: len(st))
-            for start in self.production[key]:
-                if key in start:
-                    for i in range(len(self.production[key])):
-                        if self.production[key] == start and i < len(self.production[key]) - 1:
-                            self.production[key].pop(i)
-                            self.production[key].append(start)
+            # Sort the productions by length
+            # Place the self containg productions at the end
 
-    # Check if a string is valid (terminal)
     def check(self, s):
-        return not any(c not in self.terminal for c in s)
+        # Check if a string is valid (terminal)
 
     def generate_string(self, no=5):
-        strings = []
-        final_strings = []
-        string = self.start
-        strings.append(string)
+        # Generate n strings from the grammar
+        # Place every string containing a non terminal in 'strings'
+        # Place every string containing only terminals in 'final_strings'
         while len(final_strings) < no:
-            for c in string:
-                if c in self.non_terminal:
-                    ind = 0
-                    initial_string = string
-                    string = string.replace(c, self.production[c][ind], 1)
-                    if string in final_strings:
-                        string = initial_string
-                        ind += 1
-                        string = string.replace(c, self.production[c][ind], 1)
-
-                    if not self.check(string):
-                        strings.append(string)
-
-            if self.check(string) and string not in final_strings:
-                final_strings.append(string)
-                string = strings[-1]
+            # Will check if the string is not present in 'strings'
+            # If it is, will go for the next state
+            # If not present, will advance the state
 
         return final_strings
 
     def to_finite_automaton(self):
+        # Will convert the grammar to a finite automaton
         transitions = {}
         for p in self.production.keys():
-            for s in self.production[p]:
-                for c in s:
-                    if c in self.terminal:
-                        if (p, c) not in transitions.items():
-                            transitions[(p, c)] = []
+            # Convert production to transitions
 
         for p in self.production.keys():
-            for s in self.production[p]:
-                n = ''
-                t = ''
-                for c in s:
-                    if c in self.terminal:
-                        t = c
-                    if c in self.non_terminal:
-                        n = c
-                    if n not in transitions[(p, t)] and n != '':
-                        transitions[(p, t)].append(n)
-                if not transitions[(p, t)]:
-                    transitions[(p, t)].append('')
+            # Identify terminal and not-terminal states
 
         final = ['']
 
@@ -142,76 +95,22 @@ class Grammar:
 ```
 
 ### FinalAutomata.py
-```
+```py
 class FiniteAutomaton:
-    states = []
-    alphabet = []
-    initial_state = ''
-    final_states = []
-    transitions = {}
+    # Finite Automaton parameters
 
     def __init__(self, states, alphabet, initial_state, transitions, final_states):
-        self.states = states
-        self.alphabet = alphabet
-        self.initial_state = initial_state
-        self.transitions = transitions
-        self.final_states = final_states
+        # Initialize the finite automaton
 
     def check(self, string):
-        current_state = self.initial_state
+        # Start from the initial state
 
         for char in string:
-            if (current_state, char) in self.transitions:
-                next_states = self.transitions[(current_state, char)]
-                if not next_states:
-                    return False
-                current_state = next_states[0]
-            else:
-                return False
+            # Check if the state has a transition for the current character
+            # If it does, advance the state
+            # If not, return False
 
         return current_state in self.final_states
-
-```
-
-## main.py
-```
-from Grammar import Grammar
-
-
-def main():
-    g = Grammar(['S', 'B', 'D', 'Q'],
-                ['a', 'b', 'c', 'd'],
-                {'S': ['aB', 'bB'], 'B': ['cD'], 'D': ['dQ', 'a'], 'Q': ['dB', 'dQ']},
-                'S')
-
-    # The Grammar.generate_string(n) function will generate n (default: 5)
-    # strings corresponding to the specified grammar
-    strings = g.generate_string()
-    print('Generated strings:')
-    print(strings, end='\n\n')
-
-    # The Grammar.to_finite_automaton will convert final automaton format
-    fa = g.to_finite_automaton()
-    print('Generated transition:')
-    print(fa.transitions, end='\n\n')
-
-    # The FinalAutomaton.check(s) will check if the string s is derived from
-    # the transition
-    print('Corresponding strings:')
-    for s in strings:
-        print(fa.check(s))
-
-    print()
-
-    # Un-corresponding strings
-    print('Un-corresponding:')
-    print(fa.check('aa'))
-    print(fa.check('mna'))
-    print(fa.check('acdca'))
-
-
-if __name__ == '__main__':
-    main()
 ```
 
 ## Conclusions / Screenshots / Results

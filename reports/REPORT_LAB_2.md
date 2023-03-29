@@ -55,22 +55,15 @@ F = {q4},
 Returns the classification of the grammar based on Chomsky hierarchy.
 ```python
 def get_classification(self):
+    # Start with the most general classification
     classification = '3'
 
     for p in self.production.keys():
-        if len(p) > 1:
-            classification = '1'
-            break
-        for s in self.production[p]:
-            if len(s) == 0:
-                pass
-            elif len(s) > 2 or s[0] in self.non_terminal or (len(s) == 2 and s[1] in self.terminal):
-                classification = '2'
+        # Check for class 1, if true break
+        # Check for class 2
 
     for p in self.production.keys():
-        if any(c in p for c in self.terminal):
-            classification = '0'
-            break
+        # Check for class 0 condition
 
     return classification
 ```
@@ -79,20 +72,17 @@ def get_classification(self):
 
 ### Finite Automaton to Regular Grammar conversion
 Converts a finite automaton to a regular grammar.
-```python
+```py
 def to_grammar(self):
     from Grammar import Grammar
 
     production = {}
 
     for t in self.transitions.keys():
-        if t[0] not in production.keys():
-            production[t[0]] = []
+        # Get left side of production
 
     for t in self.transitions.keys():
-        for s in self.transitions[t]:
-            if t[1] + s not in production[t[0]]:
-                production[t[0]].append(t[1] + s)
+        # Get the right side for each production
 
     return Grammar(self.states, self.alphabet, production, self.initial_state)
 ```
@@ -101,43 +91,30 @@ def to_grammar(self):
 
 ### Determinism check
 Determines whether the finite automaton is deterministic or non-deterministic.
-```python
+```py
 def get_type(self):
-    if type(self.final_states) == str:
-        return 'NFA'
-    if type(self.final_states) == list:
-        return 'DFA'
+    # Due to the why it's declared
+    # The type can be determined by the type of transitions
 ```
 
 ---
 
 ### Non-deterministic Finite Automaton to Deterministic Finite Automaton conversion
 Converts a non-deterministic finite automaton to a deterministic finite automaton.
-```python
+```py
 def to_dfa(self):
     dfa_final_states = []
     dfa_transitions = {}
 
+    # Store all the DFA states starting with the initial state
     dfa_states = [[self.initial_state]]
 
     for states in dfa_states:
-        for s in states:
-            new_states = []
-            state_terminals = []
-            for c in self.alphabet:
-                if (s, c) in self.transitions.keys():
-                    new_states.append(self.transitions[(s, c)])
-                    state_terminals.append(c)
-            for ns in new_states:
-                if ns and ns not in dfa_states:
-                    dfa_states.append(ns)
-            for i in range(len(new_states)):
-                if new_states[i]:
-                    dfa_transitions[(tuple(states), state_terminals[i])] = new_states[i]
-
+        # If new states are deduced, develope the new states until
+        # no new states appear 
+        
     for states in dfa_states:
-        if self.final_states in states:
-            dfa_final_states.append(states)
+        # Get the set of DFA states
 
     return FinalAutomata(dfa_states, self.alphabet, self.initial_state, dfa_transitions, dfa_final_states)
 ```
