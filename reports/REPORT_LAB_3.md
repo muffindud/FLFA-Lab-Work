@@ -112,3 +112,77 @@ def tokenize(self):
 
     return tokens
 ```
+
+## Results
+### Inputs
+#### demo.txt
+This file contains valid tokens.
+```txt
+{
+    x = 1 + 2
+    y = 3 + 4
+    z = x + y
+
+    if (z > 10) {
+        print(z)
+    }
+    else {
+        print(x - y)
+    }
+}
+```
+##### Output:
+When running this input through the tokenizer the result is the following output:
+```txt
+('BLOCK_START', '{')
+('IDENTIFIER', 'x')
+('ASSIGNMENT', '=')
+('INTEGER', '1')
+('ADDITION', '+')
+('INTEGER', '2')
+('IDENTIFIER', 'y')
+('ASSIGNMENT', '=')
+('INTEGER', '3')
+('ADDITION', '+')
+('INTEGER', '4')
+('IDENTIFIER', 'z')
+('ASSIGNMENT', '=')
+('IDENTIFIER', 'x')
+('ADDITION', '+')
+('IDENTIFIER', 'y')
+('IF', 'if')
+('LEFT_PARENTHESIS', '(')
+('IDENTIFIER', 'z')
+('GREATER_THAN', '>')
+('INTEGER', '10')
+('RIGHT_PARENTHESIS', ')')
+('BLOCK_START', '{')
+('PRINT', 'print')
+('LEFT_PARENTHESIS', '(')
+('IDENTIFIER', 'z')
+('RIGHT_PARENTHESIS', ')')
+('BLOCK_END', '}')
+('ELSE', 'else')
+('BLOCK_START', '{')
+('PRINT', 'print')
+('LEFT_PARENTHESIS', '(')
+('IDENTIFIER', 'x')
+('SUBTRACTION', '-')
+('IDENTIFIER', 'y')
+('RIGHT_PARENTHESIS', ')')
+('BLOCK_END', '}')
+('BLOCK_END', '}')
+```
+
+#### illegal_demo.txt
+This file contains invalid tokens.
+```txt
+{
+    x = 3
+]
+```
+##### Output:
+When running this input through the tokenizer the result is the following output:
+```txt
+Exception: Invalid token ']'
+```
