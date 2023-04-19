@@ -16,8 +16,10 @@ def main():
         sort=False
     )
 
-    print(grammar.production)
-    grammar = grammar.to_cnf()
+    cnf = grammar.to_cnf()
+    print("CNF production", cnf.production)
+    print("CNF non terminals", cnf.non_terminal)
+    print("CNF terminals", cnf.terminal)
 
 
 if __name__ == '__main__':

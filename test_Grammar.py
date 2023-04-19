@@ -19,7 +19,7 @@ class TestGrammar(unittest.TestCase):
         )
 
         vn, vt, prod, start = grammar1.non_terminal, grammar1.terminal, grammar1.production, grammar1.start
-        prod, vn = grammar1._Grammar__eliminate_epsilon(prod, vn)
+        prod, vn = grammar1.eliminate_epsilon(prod, vn)
 
         self.assertEqual(
             prod,
@@ -53,7 +53,7 @@ class TestGrammar(unittest.TestCase):
         )
 
         vn, vt, prod, start = grammar1.non_terminal, grammar1.terminal, grammar1.production, grammar1.start
-        prod, vn = grammar1._Grammar__eliminate_renaming(prod, vn)
+        prod, vn = grammar1.eliminate_renaming(prod, vn)
 
         self.assertEqual(
             prod,
@@ -82,7 +82,7 @@ class TestGrammar(unittest.TestCase):
         )
 
         vn, vt, prod, start = grammar1.non_terminal, grammar1.terminal, grammar1.production, grammar1.start
-        prod, vn = grammar1._Grammar__eliminate_inaccessible(start, prod, vn)
+        prod, vn = grammar1.eliminate_inaccessible(start, prod, vn)
 
         self.assertEqual(
             prod,
@@ -99,7 +99,36 @@ class TestGrammar(unittest.TestCase):
             ['S', 'A', 'B', 'C']
         )
 
-    def __test_to_cnf(self):
+    def test_non_productive_elimination(self):
+        grammar1 = Grammar(
+            ['S', 'A', 'B', 'C', 'D'],
+            ['a', 'b'],
+            {
+                'S': ['bA', 'BC'],
+                'A': ['a', 'aS', 'bAaAb'],
+                'B': ['A', 'bS', 'aAa'],
+                'C': ['', 'AB'],
+                'D': ['AB']
+            },
+            'S',
+            sort=False
+        )
+
+        vn, vt, prod, start = grammar1.non_terminal, grammar1.terminal, grammar1.production, grammar1.start
+        prod, vn = grammar1.eliminate_non_productive(prod, vn)
+
+        self.assertEqual(
+            prod,
+            {
+                'S': ['bA', 'BC'],
+                'A': ['a', 'aS', 'bAaAb'],
+                'B': ['A', 'bS', 'aAa'],
+                'C': ['', 'AB'],
+                'D': ['AB']
+            }
+        )
+
+    def test_to_cnf(self):
         grammar1 = Grammar(
             ['S', 'A', 'B', 'C', 'D'],
             ['a', 'b'],
@@ -119,6 +148,22 @@ class TestGrammar(unittest.TestCase):
         self.assertEqual(
             cnf.production,
             {
-
+                'S': ['EA', 'BC', 'ES', 'DF', 'D', 'DS', 'EG'],
+                'A': ['D', 'DS', 'EH'],
+                'B': ['ES', 'DI', 'D', 'DS', 'EJ'],
+                'C': ['AB'],
+                'D': ['a'],
+                'E': ['b'],
+                'F': ['AD'],
+                'G': ['AK'],
+                'H': ['AL'],
+                'I': ['AD'],
+                'J': ['AM'],
+                'K': ['DN'],
+                'L': ['DO'],
+                'M': ['DP'],
+                'N': ['AE'],
+                'O': ['AE'],
+                'P': ['AE']
             }
         )
