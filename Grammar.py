@@ -146,8 +146,22 @@ class Grammar:
         return prod, vn
 
     # Eliminates renaming
-    def eliminate_renaming(self):
-        pass
+    @staticmethod
+    def __eliminate_renaming(prod, vn):
+        # Identify unit productions
+        new_unit = True
+        while new_unit:
+            new_unit = False
+            for p in list(prod.keys()):
+                for s in prod[p]:
+                    if len(s) == 1 and s in vn:
+                        new_unit = True
+                        for u in prod[s]:
+                            if u not in prod[p]:
+                                prod[p].append(u)
+                        prod[p].remove(s)
+
+        return prod, vn
 
     # Eliminates inaccessible productions
     @staticmethod
@@ -176,10 +190,11 @@ class Grammar:
         prod = self.production
         start = self.start
 
-        prod, vn = self.__eliminate_epsilon(prod, vn)
-        print(vn, vt, start)
-        print(prod)
+        # prod, vn = self.__eliminate_epsilon(prod, vn)
+        # print("Epsilon elimination:", prod)
+        prod, vn = self.__eliminate_renaming(prod, vn)
+        print("Unit removal", prod)
+        # prod, vn = self.__eliminate_inaccessible(start, prod, vn)
+        # print("Inaccessible removal:", prod)
 
-        prod, vn = self.__eliminate_inaccessible(start, prod, vn)
-        print(vn, vt, start)
-        print(prod)
+        return Grammar(vn, vt, prod, start, False)
