@@ -1,3 +1,6 @@
+from string import ascii_uppercase
+
+
 def min_len_index(arr):
     m = 0
     for i in range(len(arr)):
@@ -217,5 +220,37 @@ class Grammar:
         prod, vn = self.eliminate_renaming(prod, vn)
         prod, vn = self.eliminate_inaccessible(start, prod, vn)
         prod, vn = self.eliminate_non_productive(prod, vt)
+
+        single_prod_identifier = {}
+
+        ind = 0
+        for v in vt:
+            while ascii_uppercase[ind] in vn:
+                ind += 1
+            vn.append(ascii_uppercase[ind])
+            prod[ascii_uppercase[ind]] = [v]
+            single_prod_identifier[v] = ascii_uppercase[ind]
+            ind += 1
+
+        for p in list(prod.keys()):
+            if len(prod[p]) == 1 and prod[p][0] in vt:
+                break
+            for i in range(len(prod[p])):
+                for j in range(len(prod[p][i])):
+                    if prod[p][i][j] in vt:
+                        prod[p][i] = prod[p][i].replace(prod[p][i][j], single_prod_identifier[prod[p][i][j]])
+
+        new_prod = True
+        while new_prod:
+            new_prod = False
+            for p in list(prod.keys()):
+                for i in range(len(prod[p])):
+                    if len(prod[p][i]) > 2:
+                        new_v = ascii_uppercase[ind]
+                        vn.append(new_v)
+                        prod[new_v] = [prod[p][i][1:]]
+                        prod[p][i] = prod[p][i][0] + new_v
+                        ind += 1
+                        new_prod = True
 
         return Grammar(vn, vt, prod, start, False)
