@@ -111,7 +111,7 @@ class Grammar:
 
     # Eliminates epsilon productions
     @staticmethod
-    def __eliminate_epsilon(prod, vn):
+    def eliminate_epsilon(prod, vn):
         # Find all initial nullable non-terminals
         nullable = []
         for p in prod.keys():
@@ -141,13 +141,12 @@ class Grammar:
                 prod[p].remove('')
                 if not prod[p]:
                     del prod[p]
-                    vn.remove(p)
 
-        return prod, vn
+        return prod, list(prod.keys())
 
     # Eliminates renaming
     @staticmethod
-    def __eliminate_renaming(prod, vn):
+    def eliminate_renaming(prod, vn):
         # Identify unit productions
         new_unit = True
         while new_unit:
@@ -161,11 +160,11 @@ class Grammar:
                                 prod[p].append(u)
                         prod[p].remove(s)
 
-        return prod, vn
+        return prod, list(prod.keys())
 
     # Eliminates inaccessible productions
     @staticmethod
-    def __eliminate_inaccessible(start, prod, vn):
+    def eliminate_inaccessible(start, prod, vn):
         accessible = [start]
         for p in prod.keys():
             for s in prod[p]:
@@ -176,13 +175,37 @@ class Grammar:
         for p in list(prod.keys()):
             if p not in accessible:
                 del prod[p]
-                vn.remove(p)
 
-        return prod, vn
+        return prod, list(prod.keys())
 
     # Eliminates non-productive productions
-    def eliminate_non_productive(self):
-        pass
+    @staticmethod
+    def eliminate_non_productive(prod, vt):
+        productive = []
+        for p in prod.keys():
+            for s in prod[p]:
+                if all(c in vt for c in s):
+                    productive.append(p)
+
+        new_productive = True
+        while new_productive:
+            new_productive = False
+            for p in prod.keys():
+                for s in prod[p]:
+                    has_non_productive = False
+                    for c in s:
+                        if c in vt and c not in productive:
+                            has_non_productive = True
+                    if not has_non_productive:
+                        if p not in productive:
+                            productive.append(p)
+                            new_productive = True
+
+        for p in list(prod.keys()):
+            if p not in productive:
+                del prod[p]
+
+        return prod, list(prod.keys())
 
     def to_cnf(self):
         vt = self.terminal
@@ -190,11 +213,9 @@ class Grammar:
         prod = self.production
         start = self.start
 
-        # prod, vn = self.__eliminate_epsilon(prod, vn)
-        # print("Epsilon elimination:", prod)
-        prod, vn = self.__eliminate_renaming(prod, vn)
-        print("Unit removal", prod)
-        # prod, vn = self.__eliminate_inaccessible(start, prod, vn)
-        # print("Inaccessible removal:", prod)
+        prod, vn = self.eliminate_epsilon(prod, vn)
+        prod, vn = self.eliminate_renaming(prod, vn)
+        prod, vn = self.eliminate_inaccessible(start, prod, vn)
+        prod, vn = self.eliminate_non_productive(prod, vt)
 
         return Grammar(vn, vt, prod, start, False)
