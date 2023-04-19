@@ -12,20 +12,21 @@ class Grammar:
     production = {}
     start = ''
 
-    def __init__(self, non_terminal, terminal, production, start):
+    def __init__(self, non_terminal, terminal, production, start, sort=True):
         self.non_terminal = non_terminal
         self.terminal = terminal
         self.production = production
         self.start = start
 
-        for key in self.production:
-            self.production[key].sort(key=lambda st: len(st))
-            for start in self.production[key]:
-                if key in start:
-                    for i in range(len(self.production[key])):
-                        if self.production[key] == start and i < len(self.production[key]) - 1:
-                            self.production[key].pop(i)
-                            self.production[key].append(start)
+        if sort:
+            for key in self.production:
+                self.production[key].sort(key=lambda st: len(st))
+                for start in self.production[key]:
+                    if key in start:
+                        for i in range(len(self.production[key])):
+                            if self.production[key] == start and i < len(self.production[key]) - 1:
+                                self.production[key].pop(i)
+                                self.production[key].append(start)
 
     # Check if a string is valid (terminal)
     def check(self, s):
@@ -87,6 +88,7 @@ class Grammar:
 
         return FinalAutomata(self.non_terminal, self.terminal, self.start, transitions, final)
 
+    # Returns the classification of the grammar
     def get_classification(self):
         classification = '3'
 
@@ -106,3 +108,78 @@ class Grammar:
                 break
 
         return classification
+
+    # Eliminates epsilon productions
+    @staticmethod
+    def __eliminate_epsilon(prod, vn):
+        # Find all initial nullable non-terminals
+        nullable = []
+        for p in prod.keys():
+            for s in prod[p]:
+                if s == '' and p not in nullable:
+                    nullable.append(p)
+
+        # Find all deductible nullable non-terminals
+        new_nullable = True
+        while new_nullable:
+            new_nullable = False
+            for p in prod.keys():
+                for s in prod[p]:
+                    if all(c in nullable for c in s) and p not in nullable:
+                        nullable.append(p)
+                        new_nullable = True
+
+        # Eliminate epsilon productions
+        for p in list(prod.keys()):
+            for s in prod[p]:
+                for c in s:
+                    if c in nullable:
+                        prod[p].append(s.replace(c, ''))
+
+            # Remove production if is epsilon
+            if p in nullable:
+                prod[p].remove('')
+                if not prod[p]:
+                    del prod[p]
+                    vn.remove(p)
+
+        return prod, vn
+
+    # Eliminates renaming
+    def eliminate_renaming(self):
+        pass
+
+    # Eliminates inaccessible productions
+    @staticmethod
+    def __eliminate_inaccessible(start, prod, vn):
+        accessible = [start]
+        for p in prod.keys():
+            for s in prod[p]:
+                for c in s:
+                    if c in vn and c not in accessible:
+                        accessible.append(c)
+
+        for p in list(prod.keys()):
+            if p not in accessible:
+                del prod[p]
+                vn.remove(p)
+
+        return prod, vn
+
+    # Eliminates non-productive productions
+    def eliminate_non_productive(self):
+        pass
+
+    def to_cnf(self):
+        vt = self.terminal
+        vn = self.non_terminal
+        prod = self.production
+        start = self.start
+
+        prod, vn = self.__eliminate_epsilon(prod, vn)
+        print(vn, vt, start)
+        print(prod)
+
+        prod, vn = self.__eliminate_inaccessible(start, prod, vn)
+        print(vn, vt, start)
+        print(prod)

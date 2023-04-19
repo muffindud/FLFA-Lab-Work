@@ -1,22 +1,24 @@
-from time import sleep
-from Lexer import Lexer
+from Grammar import Grammar
 
 
-def main_legal():
-    program = Lexer("demo.txt")
-    toks = program.tokenize()
-    for t in toks:
-        print(t)
+def main():
+    grammar = Grammar(
+        ['S', 'A', 'B', 'C', 'D'],
+        ['a', 'b'],
+        {
+            'S': ['bA', 'BC'],
+            'A': ['a', 'aS', 'bAaAb'],
+            'B': ['A', 'bS', 'aAa'],
+            'C': ['', 'AB'],
+            'D': ['AB']
+        },
+        'S',
+        sort=False
+    )
 
-
-def main_illegal():
-    program = Lexer("illegal_demo.txt")
-    toks = program.tokenize()
-    for t in toks:
-        print(t)
+    print(grammar.production)
+    grammar = grammar.to_cnf()
 
 
 if __name__ == '__main__':
-    main_legal()
-    sleep(1)
-    main_illegal()
+    main()
