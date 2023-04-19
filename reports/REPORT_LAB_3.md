@@ -5,7 +5,7 @@
 ## Theory:
 The laboratory work is implemented on the following token dictionary:
 ##### NOTES: 
-1. The order in which tokens are deffined is important.
+1. The order in which tokens are defined is important.
 
 ```py
 tokens = {
