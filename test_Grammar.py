@@ -1,5 +1,5 @@
 import unittest
-from Grammar import Grammar
+from src.Grammar import Grammar
 
 
 class TestGrammar(unittest.TestCase):

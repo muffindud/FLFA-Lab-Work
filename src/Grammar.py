@@ -63,7 +63,7 @@ class Grammar:
 
     # Converts Grammar ot NFA
     def to_nfa(self):
-        from FinalAutomata import FinalAutomata
+        from src.FinalAutomata import FinalAutomata
 
         transitions = {}
         for p in self.production.keys():

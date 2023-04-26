@@ -1,4 +1,4 @@
-from Grammar import Grammar
+from src.Grammar import Grammar
 
 
 def main():
