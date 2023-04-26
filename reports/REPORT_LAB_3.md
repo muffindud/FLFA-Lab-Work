@@ -71,16 +71,9 @@ The class takes in a string that's the file name and opens it in read-only mode.
 The tokens are defined in a dictionary named `tokens` and are used to create a regex that will be used to find the tokens in the content.
 ```py
 class Lexer:
-    file = None
-    content = ""
-    tokens = "|".join(f"(?P<{name}>{regex})" for name, regex in Tokens.tokens.items())
-
-    def __init__(self, file_name):
-        self.file = open(file_name, "r")
-        self.content = self.file.read()
-
-    def tokenize(self)
-        # Tokenize the content
+    # The Lexer class takes as constructor a string that's the file name
+    # and stores the content of the file in a string named content.
+    # The `tokens` property is a dictionary that sores the tokens defined in the Tokens.py file.
 ```
 
 ### Tokenizer
@@ -95,21 +88,7 @@ The tokenize function uses the regex to find all the tokens in the content and r
 
 ```py
 def tokenize(self):
-    matches = re.finditer(self.tokens, self.content)
-
-    tokens = []
-    for match in matches:
-        token_name = match.lastgroup
-        token_value = match.group(token_name)
-
-        if token_name in ["WHITESPACE", "NEWLINE"]:
-            continue
-
-        if token_name == "INVALID":
-            raise Exception(f"Invalid token '{token_value}'")
-
-        tokens.append((token_name, token_value))
-
+    # Use the regex to find all the tokens in the content.
     return tokens
 ```
 

@@ -57,60 +57,63 @@ def min_len_index(arr):
 
 
 class Grammar:
-    # Grammar parameters
+    # The constructor for the Grammar class takes the following parameters:
+    #   - states: a list of states
+    #   - alphabet: a list of characters
+    #   - initial_state: the initial state
+    #   - transitions: a dictionary of transitions
 
-    def __init__(self, non_terminal, terminal, production, start):
-        # Initialize the grammar
+    # If the sort parameter is set to True, the productions will be sorted by length 
+    # and place the self-contained productions at the end
+```
 
-        for key in self.production:
-            # Sort the productions by length
-            # Place the self containg productions at the end
+### String check
+```py
+def check(self, s):
+    # Check if all the characters in the string are in the alphabet
+    # If not, return False
+```
 
-    def check(self, s):
-        # Check if a string is valid (terminal)
+### String generation
+```py
+def generate_string(self, no=5):
+    # 1. Create an empty array to store valid strings containing terminals and non-terminals
+    # 2. Create an empty array to store valid strings containing only terminals
+    # 3. Start from a string containing only the initial state
+    # 4. Each iteration, replace a non-terminal form the string with a production and add it to the strings list if it's
+    #    not already there, else use the next state for the not-terminal
+    # 5. If the string contains only terminals, add it to the terminals list and take the last string from the strings list
+    # 6. Repeat until the number of strings is reached
+    # 7. Return the terminals list
+    return final_strings
+```
 
-    def generate_string(self, no=5):
-        # Generate n strings from the grammar
-        # Place every string containing a non terminal in 'strings'
-        # Place every string containing only terminals in 'final_strings'
-        while len(final_strings) < no:
-            # Will check if the string is not present in 'strings'
-            # If it is, will go for the next state
-            # If not present, will advance the state
-
-        return final_strings
-
-    def to_finite_automaton(self):
-        # Will convert the grammar to a finite automaton
-        transitions = {}
-        for p in self.production.keys():
-            # Convert production to transitions
-
-        for p in self.production.keys():
-            # Identify terminal and not-terminal states
-
-        final = ['']
-
-        return FiniteAutomaton(self.non_terminal, self.terminal, self.start, transitions, final)
+### Finite Automaton conversion
+```py
+def to_finite_automaton(self):
+    # 1. Create an empty dictionary to store the transitions
+    # 2. For each production, add a transition to the dictionary
+    # 3. For each production, if the production is self-contained, add the state to the final states
+    # 4. Return the FiniteAutomaton object
 ```
 
 ### FinalAutomata.py
 ```py
 class FiniteAutomaton:
-    # Finite Automaton parameters
+    # The constructor for the FiniteAutomaton class takes the following parameters:
+    #   - states: a list of states
+    #   - alphabet: a list of characters
+    #   - initial_state: the initial state  
+    #   - final_states: a list of final states
+    #   - transitions: a dictionary of transitions
+```
 
-    def __init__(self, states, alphabet, initial_state, transitions, final_states):
-        # Initialize the finite automaton
-
-    def check(self, string):
-        # Start from the initial state
-
-        for char in string:
-            # Check if the state has a transition for the current character
-            # If it does, advance the state
-            # If not, return False
-
-        return current_state in self.final_states
+### String check
+```py
+def check(self, string):
+    # 1. Check if the string has a transition for the current character
+    # 2. If it does, check if the string is valid for the next state
+    # 3. If it doesn't, return False
 ```
 
 ## Conclusions / Screenshots / Results

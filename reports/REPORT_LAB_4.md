@@ -37,53 +37,63 @@ The new functions are:
 1.1 Epsilon elimination
 ```py
 def eliminate_epsilon(prod):
-    # Create an initial list of directly nullable non-terminals
-    # Adds to the list all the deduced indirect nullable non-terminals
-    # Removes the nullable non-terminals from the productions and replaces them with the corresponding productions
+    # 1. Create an empty list to store all nullable non-terminals
+    # 2. Identify all directly nullable non-terminals by checking if any of their productions are epsilon
+    # 3. Identify all indirectly nullable non-terminals by checking if any of their productions contain only nullable non-terminals
+    # 4. Repeat step 3 until there are no more new nullable non-terminals
+    # 5. Add new productions for all non-terminals that contain nullable non-terminals
+    # 6. Remove all epsilon productions
     return prod, list(prod.keys())
 ```
 
 1.2 Unit production elimination
 ```py
 def eliminate_renaming(prod, vn):
-    # Identify unit productions
-    # Eliminate unit productions until there are no more
+    # 1. Check if there are any unit productions
+    # 2. Remove all unit productions and replace them with the productions of the non-terminal they produce
+    # 3. Repeat steps 1 and 2 until there are no more unit productions
+    # 4. Remove all productions that produce the same non-terminal
     return prod, list(prod.keys())
 ```
 
 1.3 Inaccessible symbols elimination
 ```py
 def eliminate_inaccessible(start, prod, vn):
-    # Identify all accessible non-terminals
-    # Eliminate all inaccessible non-terminals
+    # 1. Create a list to store all accessible non-terminals starting with the start value
+    # 2. For every new value in the accessible add to the accessible list all non-terminals that are in the productions of the current non-terminal
+    # 3. Repeat step 2 until there are no more new accessible non-terminals
+    # 4. Remove all non-terminals from the production that are not accessible
     return prod, list(prod.keys())
 ```
 
 1.4 Unproductive symbols elimination
 ```py
 def eliminate_non_productive(prod, vt):
-    # Identify all initially productive non-terminals
-    # Identify all newly productive non-terminals until there are no more
-    # Eliminate all unproductive non-terminals
+    # 1. Create an empty list to store all productive non-terminals
+    # 2. Identify all directly productive non-terminals by checking if any of their productions are only terminals
+    # 3. Identify all indirectly productive non-terminals by checking if any of their productions contain only productive non-terminals
+    # 4. Repeat step 3 until there are no more new productive non-terminals
+    # 5. Remove all non-productive productions
     return prod, list(prod.keys())
 ```
 
 2.1 CNF conversion
 ```py
 def to_cnf(self):
-    # Create temporary variables
+    # Create temporary variables for the processing
 
     # Eliminate epsilon productions
     # Eliminate unit productions
     # Eliminate inaccessible symbols
     # Eliminate unproductive symbols
 
-    # Create productions for terminal variables
-
-    # Replace the terminal values in productions with new non-terminal variables
-    
-    # Create new non-terminal variables for productions with more than 2 symbols
-    
+    # 1. Create new non-terminals for all terminal values
+    # 2. Replace all terminal values with the new non-terminals in the productions
+    # 3. Identify all the productions that have more than 2 non-terminals
+    # 4. Create new non-terminals for all the productions identified in step 3
+    # 5. Replace all the productions identified in step 3 with the new non-terminals
+    # 6. Repeat steps 3, 4 and 5 until there are no more productions with more than 2 non-terminals
+    # 7. Return a new Grammar object with the new CNF grammar
     return Grammar(vn, vt, prod, start, False)
 ```
 

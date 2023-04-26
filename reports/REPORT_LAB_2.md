@@ -55,16 +55,14 @@ F = {q4},
 Returns the classification of the grammar based on Chomsky hierarchy.
 ```python
 def get_classification(self):
-    # Start with the most general classification
-    classification = '3'
-
-    for p in self.production.keys():
-        # Check for class 1, if true break
-        # Check for class 2
-
-    for p in self.production.keys():
-        # Check for class 0 condition
-
+    # 1. Create a variable to store the classification and start form the 3rd
+    # 2. If all the right sides of the productions have only one non-terminal symbol, then the grammar is of type 3 
+    #    else it's the 1st type
+    # 3. If 1st type classification has been identified jump to step 6
+    # 4. If all the right sides of the productions have only two non-terminal symbols, then the grammar is of type 2
+    # 5. Repeat steps 2, 3, 4 for all productions
+    # 6. If any of the productions has a terminal in the right side, then the grammar is of type 0
+    # 7. Return the classification
     return classification
 ```
 
@@ -74,16 +72,11 @@ def get_classification(self):
 Converts a finite automaton to a regular grammar.
 ```py
 def to_grammar(self):
-    from Grammar import Grammar
-
-    production = {}
-
-    for t in self.transitions.keys():
-        # Get left side of production
-
-    for t in self.transitions.keys():
-        # Get the right side for each production
-
+    # 1. Create a variable to store the productions
+    # 2. For each state in the finite automaton add an empty production
+    # 3. For each transition create a production
+    # 4. Repeat step 3 for all transitions
+    # 5. Return the a grammar object
     return Grammar(self.states, self.alphabet, production, self.initial_state)
 ```
 
@@ -93,8 +86,10 @@ def to_grammar(self):
 Determines whether the finite automaton is deterministic or non-deterministic.
 ```py
 def get_type(self):
-    # Due to the why it's declared
+    # Due to the way it's declared
     # The type can be determined by the type of transitions
+    # If the transitions are a list, then the finite automaton is non-deterministic
+    # If the transitions are a dictionary, then the finite automaton is deterministic
 ```
 
 ---
@@ -103,19 +98,14 @@ def get_type(self):
 Converts a non-deterministic finite automaton to a deterministic finite automaton.
 ```py
 def to_dfa(self):
-    dfa_final_states = []
-    dfa_transitions = {}
-
-    # Store all the DFA states starting with the initial state
-    dfa_states = [[self.initial_state]]
-
-    for states in dfa_states:
-        # If new states are deduced, develope the new states until
-        # no new states appear 
-        
-    for states in dfa_states:
-        # Get the set of DFA states
-
+    # Create a variable to store the states of the DFA
+    # Create a variable to store the transitions of the DFA
+    # Create a variable to store the final states of the DFA starting with an array with the initial state of the NFA
+    
+    # For each new DFA state:
+    # 1. For each individual state in the DFA state identify new state and add it to the DFA states
+    # 2. Repeat step 1 until all states have been identified
+    # 3. Return a FinalAutomata object with the DFA states, alphabet, initial state, transitions and final states
     return FinalAutomata(dfa_states, self.alphabet, self.initial_state, dfa_transitions, dfa_final_states)
 ```
 
@@ -126,29 +116,12 @@ Generates a graphical representation of the finite automaton.
 #### NOTE: Will only work if Graphviz is installed. If Graphviz is not installed, the function will generate a .gv file that can be used to generate the graph.
 ```python
 def show_graph(self, name='graph'):
-    import graphviz as gv
-
-    graph = gv.Digraph()
-
-    # Graph generation for NFA
-    if type(self.final_states) == str:
-        for state in self.states:
-            shape = 'circle' if state not in self.final_states else 'doublecircle'
-            graph.node(state, shape=shape)
-        for state in self.transitions:
-            for s in self.transitions[state]:
-                graph.edge(state[0], s, label=state[1])
-
-    # Graph generation for DFA
-    if type(self.final_states) == list:
-        for state in self.states:
-            shape = 'circle' if state not in self.final_states else 'doublecircle'
-            graph.node(repr(state), shape=shape)
-
-        for state in self.transitions:
-            for s in [self.transitions[state]]:
-                graph.edge(repr(list(state[0])), repr(s), label=state[1])
-
+    # 1. Create a graph object
+    # 2. Identify the type of the finite automaton
+    # 3. Identify the final states of the finite automaton (for drawing purposes)
+    # 4. Add the states to the graph
+    # 5. Add the transitions to the graph
+    # 6. Display the graph
     graph.view(filename=name+'.gv', directory='./graphs/')
 ```
 
