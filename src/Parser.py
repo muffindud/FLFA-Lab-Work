@@ -39,7 +39,6 @@ class Parser:
             else:
                 parent_node.children.append(parse_node)
                 break
-                # raise Exception("Expected statement")
 
     def parse_assignment(self, parent_node):
         if self.tokens[self.index][0] == "IDENTIFIER":
