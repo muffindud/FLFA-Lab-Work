@@ -1,16 +1,29 @@
-import re
 from src.Lexer import Lexer
-from src.Tokens import tokens
 
 
 class Parser:
-    lexer = None
-    tokens = tokens
-
-    def __init__(self, lexer):
-        self.lexer = lexer
+    def __init__(self, path):
+        program = Lexer(path)
+        self.tokens = program.tokenize()
+        self.index = 0
 
     def parse(self):
         pass
 
+    def parse_block(self):
+        pass
 
+    def parse_assignment(self):
+        pass
+
+    def parse_expression(self):
+        pass
+
+    def parse_if(self):
+        pass
+
+    def parse_print(self):
+        pass
+
+    def show_ast(self):
+        pass
