@@ -19,7 +19,7 @@ class Lexer:
             token_name = match.lastgroup
             token_value = match.group(token_name)
 
-            if token_name in ["WHITESPACE"]:
+            if token_name in ["WHITESPACE", "NEWLINE"]:
                 continue
 
             if token_name == "INVALID":
