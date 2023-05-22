@@ -1,5 +1,5 @@
 import re
-import Tokens
+import src.Tokens as Tokens
 
 
 class Lexer:
@@ -19,7 +19,7 @@ class Lexer:
             token_name = match.lastgroup
             token_value = match.group(token_name)
 
-            if token_name in ["WHITESPACE", "NEWLINE"]:
+            if token_name in ["WHITESPACE"]:
                 continue
 
             if token_name == "INVALID":

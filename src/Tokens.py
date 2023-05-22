@@ -24,7 +24,7 @@ tokens = {
     "GREATER_THAN_OR_EQUAL_TO": r">=",
     "LESS_THAN_OR_EQUAL_TO": r"<=",
     "EQUAL_TO": r"==",
-    "NOT_EQUAL_TO": r"<>|><",
+    "NOT_EQUAL_TO": r"<>|><|!=",
 
     # Logical operators
     "AND": r"&&",
